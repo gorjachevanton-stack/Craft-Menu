@@ -1,8 +1,8 @@
 # Craft Menu (Blocks Menu)
 
-**A production catalog and order-management interface for RimWorld 1.6.**
+**A production catalog and order-management interface for RimWorld 1.6 and 1.7.**
 
-> **Status: In Development.** This Stage 1 package has not yet been verified in a running RimWorld 1.6 installation. Treat it as a development snapshot, not a stable release.
+> **Status: In Development.** The author has tested the mod in both RimWorld 1.6 and RimWorld 1.7 and confirms that it works on both versions. This is not yet a claim of compatibility with every mod list or every third-party mod.
 
 ## Install — no manual DLL setup
 
@@ -33,20 +33,20 @@ The mod is designed to work with RimWorld's existing production bills and queues
 
 ## Compatibility
 
-- Target game version: **RimWorld 1.6**.
-- Other game versions are not declared as supported.
-- Modded or unusual item definitions may need additional classification rules.
+- **RimWorld 1.6 — tested by the author.**
+- **RimWorld 1.7 — tested by the author.**
+- Compatibility with specific third-party mods and unusual item definitions may vary.
 
 ## Build from source (developers only)
 
-Building the source is separate from installing the mod. Developers need the .NET Framework 4.7.2 targeting pack/reference assemblies and local reference DLLs from their own RimWorld installation under `Lib/`. These game/Unity reference assemblies are **not required by players** and are intentionally not part of the player installation procedure.
+Building the source is separate from installing the mod. Developers need the .NET Framework targeting pack/reference assemblies and local reference DLLs from their own RimWorld installation under `Lib/`. These game/Unity reference assemblies are **not required by players** and are intentionally not part of the player installation procedure.
 
 Run `Build-Mod.bat` for a Release build, or `Build-Mod-Force-Rebuild.bat` for a forced rebuild. The expected output is `1.6/Assemblies/BlocksMenu.dll`.
 
 ## Project notes
 
 - `Craft-Menu/README_RU.md` — detailed Russian project documentation.
-- `Craft-Menu/CHANGES_STAGE1_RU.md` — Stage 1 change notes and known verification caveats.
+- `Craft-Menu/CHANGES_STAGE1_RU.md` — Stage 1 change notes.
 - `Craft-Menu/PERFORMANCE_UPDATE_RU.md` — performance-related notes.
 - `Craft-Menu/RECIPE_AVAILABILITY_RULE_RU.md` — recipe availability rules.
 
