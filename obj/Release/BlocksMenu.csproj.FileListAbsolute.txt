@@ -1,0 +1,7 @@
+C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\BlocksMenu_stage1\1.6\Assemblies\BlocksMenu.dll
+C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\BlocksMenu_stage1\1.6\Assemblies\BlocksMenu.pdb
+C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\BlocksMenu_stage1\obj\Release\BlocksMenu.csproj.AssemblyReference.cache
+C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\BlocksMenu_stage1\obj\Release\BlocksMenu.GeneratedMSBuildEditorConfig.editorconfig
+C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\BlocksMenu_stage1\obj\Release\BlocksMenu.csproj.CoreCompileInputs.cache
+C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\BlocksMenu_stage1\obj\Release\BlocksMenu.dll
+C:\Program Files (x86)\Steam\steamapps\common\RimWorld\Mods\BlocksMenu_stage1\obj\Release\BlocksMenu.pdb

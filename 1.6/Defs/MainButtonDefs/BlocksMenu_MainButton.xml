@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+  <MainButtonDef>
+    <defName>BlocksMenu_Crafting</defName>
+    <label>Крафт</label>
+    <description>Browse crafting recipes by category.</description>
+    <tabWindowClass>BlocksMenu.MainTabWindow_CraftingMenu</tabWindowClass>
+    <order>90</order>
+    <buttonVisible>true</buttonVisible>
+  </MainButtonDef>
+</Defs>
