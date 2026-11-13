@@ -2,7 +2,7 @@
 <Defs>
   <MainButtonDef>
     <defName>BlocksMenu_Crafting</defName>
-    <label>Крафт</label>
+    <label>Crafting</label>
     <description>Browse crafting recipes by category.</description>
     <tabWindowClass>BlocksMenu.MainTabWindow_CraftingMenu</tabWindowClass>
     <order>90</order>

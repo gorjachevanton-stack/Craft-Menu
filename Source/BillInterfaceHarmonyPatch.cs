@@ -100,11 +100,11 @@ namespace BlocksMenu
                 Rect jumpRect = new Rect(jumpX, y, jumpWidth, 24f);
 
                 GUI.color = oldColor;
-                if (Widgets.ButtonText(jumpRect, "К станку", true, true, true))
+                if (Widgets.ButtonText(jumpRect, "Go to workbench", true, true, true))
                 {
                     JumpToOwningBench(__instance);
                 }
-                TooltipHandler.TipRegion(jumpRect, "Перейти к станку, на котором находится этот заказ");
+                TooltipHandler.TipRegion(jumpRect, "Go to the workbench assigned to this order");
             }
             finally
             {

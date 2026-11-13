@@ -27,9 +27,9 @@ namespace BlocksMenu
         private static readonly Color DashboardPaused = new Color(0.62f, 0.16f, 0.12f, 0.42f);
 
         private string currentFolder = string.Empty; // пустая строка = «Все»
-        private string activeMainCategory = "Производство";
-        private string selectedProfession = "Все профессии";
-        private string selectedClothingGroup = "Все";
+        private string activeMainCategory = "Production";
+        private string selectedProfession = "All Professions";
+        private string selectedClothingGroup = "All";
         private string selectedClothingFilter = "CarryBulk";
         private ThingDef selectedClothingItem;
         private Vector2 clothingScrollPosition = Vector2.zero;
@@ -94,7 +94,7 @@ namespace BlocksMenu
             Color oldHeaderColor = GUI.color;
             Text.Font = GameFont.Medium;
             GUI.color = new Color(0.96f, 0.88f, 0.72f, 1f);
-            Widgets.Label(new Rect(header.x + 16f, header.y + 5f, 260f, 31f), "⚒  БЛОКИ ПРОИЗВОДСТВА");
+            Widgets.Label(new Rect(header.x + 16f, header.y + 5f, 260f, 31f), "⚒  PRODUCTION CATALOG");
             Text.Font = GameFont.Small;
             GUI.color = DashboardAccent;
             Widgets.Label(new Rect(header.x + 18f, header.y + 34f, 250f, 23f), activeMainCategory);
@@ -103,11 +103,11 @@ namespace BlocksMenu
 
             DrawMainCategoryTabs(header);
 
-            if (activeMainCategory == "Спецодежда" || activeMainCategory == "Одежда")
+            if (activeMainCategory == "Workwear" || activeMainCategory == "Clothing")
             {
                 Rect specialRect = new Rect(inRect.x, header.yMax + gap, inRect.width,
                     Mathf.Max(220f, inRect.yMax - header.yMax - gap));
-                if (activeMainCategory == "Спецодежда") DrawSpecialWorkwearPage(specialRect);
+                if (activeMainCategory == "Workwear") DrawSpecialWorkwearPage(specialRect);
                 else DrawClothingPage(specialRect);
                 return;
             }
@@ -129,14 +129,14 @@ namespace BlocksMenu
 
             DrawPanel(recipeRect, DashboardPanel);
             Rect searchRect = new Rect(recipeRect.x + 7f, recipeRect.y + 27f, recipeRect.width - 14f, 27f);
-            Widgets.Label(new Rect(searchRect.x + 2f, searchRect.y, 48f, searchRect.height), "Поиск");
+            Widgets.Label(new Rect(searchRect.x + 2f, searchRect.y, 48f, searchRect.height), "Search");
             searchText = Widgets.TextField(new Rect(searchRect.x + 51f, searchRect.y + 1f, searchRect.width - 53f, searchRect.height - 2f), searchText ?? string.Empty);
             DrawRecipeList(new Rect(recipeRect.x, searchRect.yMax + 2f, recipeRect.width, recipeRect.height - (searchRect.yMax - recipeRect.y) - 2f));
         }
 
         private void DrawMainCategoryTabs(Rect rect)
         {
-            string[] labels = { "Производство", "Спецодежда", "Одежда" };
+            string[] labels = { "Production", "Workwear", "Clothing" };
             float gap = 5f;
             float left = rect.x + Mathf.Max(270f, rect.width * 0.275f);
             float available = rect.xMax - left - 10f;
@@ -157,7 +157,7 @@ namespace BlocksMenu
                 if (Widgets.ButtonText(button, labels[i]))
                 {
                     activeMainCategory = labels[i];
-                    if (activeMainCategory == "Спецодежда" && selectedWorkwearItem == null)
+                    if (activeMainCategory == "Workwear" && selectedWorkwearItem == null)
                         selectedWorkwearItem = GetWorkwearItems().Count > 0 ? GetWorkwearItems()[0] : null;
                 }
                 Text.Font = GameFont.Small;
@@ -190,11 +190,11 @@ namespace BlocksMenu
 
         private static readonly string[] ClothingGroups =
         {
-            "Все", "Голова", "Тело", "Штаны", "Верхняя одежда", "Перчатки", "Ботинки", "Разгрузка и рюкзаки"
+            "All", "Head", "Body", "Pants", "Outerwear", "Gloves", "Footwear", "Vests & Backpacks"
         };
 
         private static readonly string[] ClothingFilterIds = { "CarryBulk", "CarryWeight", "MoveSpeed", "WorkSpeedGlobal" };
-        private static readonly string[] ClothingFilterLabels = { "Переносимый объём", "Переносимый вес", "Скорость передвижения", "Общая скорость работы" };
+        private static readonly string[] ClothingFilterLabels = { "Carrying Capacity", "Carrying Weight", "Movement Speed", "Global Work Speed" };
 
         private void DrawClothingPage(Rect rect)
         {
@@ -219,7 +219,7 @@ namespace BlocksMenu
 
         private void DrawClothingGroupList(Rect rect)
         {
-            DrawSectionHeading(new Rect(rect.x + 10f, rect.y + 8f, rect.width - 20f, 28f), "КАТЕГОРИИ ОДЕЖДЫ");
+            DrawSectionHeading(new Rect(rect.x + 10f, rect.y + 8f, rect.width - 20f, 28f), "CLOTHING CATEGORIES");
             float y = rect.y + 42f;
             for (int i = 0; i < ClothingGroups.Length; i++)
             {
@@ -233,7 +233,7 @@ namespace BlocksMenu
                     List<ThingDef> found = GetClothingItemsForGroup();
                     selectedClothingItem = found.Count > 0 ? found[0] : null;
                 }
-                int count = group == "Все" ? GetClothingItems().Count : CountClothingGroup(group);
+                int count = group == "All" ? GetClothingItems().Count : CountClothingGroup(group);
                 Text.Anchor = TextAnchor.MiddleRight;
                 Widgets.Label(new Rect(row.xMax - 34f, row.y, 26f, row.height), count.ToString());
                 Text.Anchor = TextAnchor.UpperLeft;
@@ -279,7 +279,7 @@ namespace BlocksMenu
             Rect viewRect = new Rect(0f, 0f, listRect.width - 16f, viewHeight);
             Widgets.BeginScrollView(listRect, ref clothingScrollPosition, viewRect);
             if (items.Count == 0)
-                Widgets.Label(new Rect(8f, 8f, viewRect.width - 16f, 44f), "В этой категории пока нет предметов одежды.");
+                Widgets.Label(new Rect(8f, 8f, viewRect.width - 16f, 44f), "No clothing items found in this category yet.");
             else
             {
                 int firstRow = Mathf.Max(0, Mathf.FloorToInt(clothingScrollPosition.y / (cardHeight + cardGap)));
@@ -306,7 +306,7 @@ namespace BlocksMenu
                     for (int statIndex = 0; statIndex < ClothingFilterIds.Length; statIndex++)
                     {
                         float statValue;
-                        string statLabel = statIndex == 0 ? "Вес" : statIndex == 1 ? "Объём" : statIndex == 2 ? "Ходьба" : "Работа";
+                        string statLabel = statIndex == 0 ? "Weight" : statIndex == 1 ? "Bulk" : statIndex == 2 ? "Movement" : "Work";
                         Rect statRow = new Rect(card.x + 8f, statY + statIndex * 16f, card.width - 16f, 15f);
                         Color statColor = GUI.color;
                         GUI.color = new Color(0.72f, 0.69f, 0.62f, 1f);
@@ -331,7 +331,7 @@ namespace BlocksMenu
             ThingDef item = selectedClothingItem;
             if (item == null)
             {
-                Widgets.Label(new Rect(rect.x + 12f, rect.y + 12f, rect.width - 24f, 60f), "В этой категории нет одежды.");
+                Widgets.Label(new Rect(rect.x + 12f, rect.y + 12f, rect.width - 24f, 60f), "No clothing items in this category.");
                 return;
             }
             float y = rect.y + 10f;
@@ -341,7 +341,7 @@ namespace BlocksMenu
             y += icon + 12f;
             Widgets.DrawLineHorizontal(rect.x + 10f, y, rect.width - 20f);
             y += 10f;
-            DrawSectionHeading(new Rect(rect.x + 12f, y, rect.width - 24f, 24f), "ЭФФЕКТЫ ПРИ НОШЕНИИ");
+            DrawSectionHeading(new Rect(rect.x + 12f, y, rect.width - 24f, 24f), "EQUIPMENT EFFECTS");
             y += 28f;
             for (int i = 0; i < ClothingFilterIds.Length; i++)
             {
@@ -364,9 +364,9 @@ namespace BlocksMenu
                 y += 27f;
             }
             if (item.BaseMass > 0f)
-                Widgets.Label(new Rect(rect.x + 14f, y, rect.width - 28f, 22f), "Собственный вес: " + item.BaseMass.ToString("0.##") + " кг");
+                Widgets.Label(new Rect(rect.x + 14f, y, rect.width - 28f, 22f), "Item weight: " + item.BaseMass.ToString("0.##") + " kg");
             float buttonY = rect.yMax - 58f;
-            if (Widgets.ButtonText(new Rect(rect.x + 12f, buttonY, rect.width - 24f, 42f), "⚒  ПРОИЗВЕСТИ"))
+            if (Widgets.ButtonText(new Rect(rect.x + 12f, buttonY, rect.width - 24f, 42f), "⚒  CRAFT"))
                 OpenProductionForWorkwear(item);
         }
 
@@ -397,7 +397,7 @@ namespace BlocksMenu
             List<ThingDef> all = GetClothingItems();
             List<ThingDef> result = new List<ThingDef>();
             for (int i = 0; i < all.Count; i++)
-                if (selectedClothingGroup == "Все" || IsInClothingGroup(all[i], selectedClothingGroup)) result.Add(all[i]);
+                if (selectedClothingGroup == "All" || IsInClothingGroup(all[i], selectedClothingGroup)) result.Add(all[i]);
             SortClothingItems(result);
             return result;
         }
@@ -415,16 +415,16 @@ namespace BlocksMenu
             string id = (def.defName ?? string.Empty).ToLowerInvariant();
             string label = def.label ?? string.Empty;
             string key = (id + " " + label).ToLowerInvariant();
-            if (group == "Голова") return key.Contains("hat") || key.Contains("helmet") || key.Contains("hood") || key.Contains("mask") || key.Contains("шап") || key.Contains("шлем") || key.Contains("маск") || key.Contains("капюш");
-            if (group == "Перчатки") return key.Contains("glove") || key.Contains("митен") || key.Contains("перчат");
-            if (group == "Ботинки") return key.Contains("boot") || key.Contains("shoe") || key.Contains("sandal") || key.Contains("сапог") || key.Contains("ботин") || key.Contains("обув");
-            if (group == "Штаны") return key.Contains("pants") || key.Contains("trousers") || key.Contains("bottom") || key.Contains("брюк") || key.Contains("штаны");
-            if (group == "Разгрузка и рюкзаки") return key.Contains("backpack") || key.Contains("bandolier") || key.Contains("vest") || key.Contains("belt") || key.Contains("рюкзак") || key.Contains("разгруз") || key.Contains("подсум") || key.Contains("пояс");
-            if (group == "Верхняя одежда") return key.Contains("coat") || key.Contains("parka") || key.Contains("jacket") || key.Contains("duster") || key.Contains("cloak") || key.Contains("poncho") || key.Contains("пальто") || key.Contains("куртк") || key.Contains("плащ");
-            if (group == "Тело")
-                return !IsInClothingGroup(def, "Голова") && !IsInClothingGroup(def, "Штаны") &&
-                       !IsInClothingGroup(def, "Верхняя одежда") && !IsInClothingGroup(def, "Перчатки") &&
-                       !IsInClothingGroup(def, "Ботинки") && !IsInClothingGroup(def, "Разгрузка и рюкзаки");
+            if (group == "Head") return key.Contains("hat") || key.Contains("helmet") || key.Contains("hood") || key.Contains("mask") || key.Contains("шап") || key.Contains("шлем") || key.Contains("маск") || key.Contains("капюш");
+            if (group == "Gloves") return key.Contains("glove") || key.Contains("митен") || key.Contains("перчат");
+            if (group == "Footwear") return key.Contains("boot") || key.Contains("shoe") || key.Contains("sandal") || key.Contains("сапог") || key.Contains("ботин") || key.Contains("обув");
+            if (group == "Pants") return key.Contains("pants") || key.Contains("trousers") || key.Contains("bottom") || key.Contains("брюк") || key.Contains("штаны");
+            if (group == "Vests & Backpacks") return key.Contains("backpack") || key.Contains("bandolier") || key.Contains("vest") || key.Contains("belt") || key.Contains("рюкзак") || key.Contains("разгруз") || key.Contains("подсум") || key.Contains("пояс");
+            if (group == "Outerwear") return key.Contains("coat") || key.Contains("parka") || key.Contains("jacket") || key.Contains("duster") || key.Contains("cloak") || key.Contains("poncho") || key.Contains("пальто") || key.Contains("куртк") || key.Contains("плащ");
+            if (group == "Body")
+                return !IsInClothingGroup(def, "Head") && !IsInClothingGroup(def, "Pants") &&
+                       !IsInClothingGroup(def, "Outerwear") && !IsInClothingGroup(def, "Gloves") &&
+                       !IsInClothingGroup(def, "Footwear") && !IsInClothingGroup(def, "Vests & Backpacks");
             return false;
         }
 
@@ -469,13 +469,13 @@ namespace BlocksMenu
 
         private static readonly string[] ProfessionNames =
         {
-            "Все профессии", "Горное дело", "Строительство и ремонт", "Производство и ремесло",
-            "Сельское хозяйство", "Кулинария и разделка", "Медицина и хирургия", "Исследования и наука"
+            "All Professions", "Mining", "Construction & Repair", "Manufacturing & Crafting",
+            "Agriculture", "Cooking & Butchery", "Medicine & Surgery", "Research & Science"
         };
 
         private void DrawProfessionList(Rect rect)
         {
-            DrawSectionHeading(new Rect(rect.x + 10f, rect.y + 8f, rect.width - 20f, 28f), "ПРОФЕССИЯ");
+            DrawSectionHeading(new Rect(rect.x + 10f, rect.y + 8f, rect.width - 20f, 28f), "PROFESSION");
             float y = rect.y + 42f;
             for (int i = 0; i < ProfessionNames.Length; i++)
             {
@@ -490,7 +490,7 @@ namespace BlocksMenu
                     List<ThingDef> professionItems = GetWorkwearItemsForProfession();
                     selectedWorkwearItem = professionItems.Count > 0 ? professionItems[0] : null;
                 }
-                int itemCount = profession == "Все профессии" ? GetWorkwearItems().Count : CountWorkwearForProfession(profession);
+                int itemCount = profession == "All Professions" ? GetWorkwearItems().Count : CountWorkwearForProfession(profession);
                 Text.Anchor = TextAnchor.MiddleRight;
                 Widgets.Label(new Rect(row.xMax - 34f, row.y, 26f, row.height), itemCount.ToString());
                 Text.Anchor = TextAnchor.UpperLeft;
@@ -508,7 +508,7 @@ namespace BlocksMenu
 
         private void DrawWorkwearCards(Rect rect)
         {
-            DrawSectionHeading(new Rect(rect.x + 10f, rect.y + 8f, rect.width - 20f, 26f), "СПЕЦОДЕЖДА И ИНСТРУМЕНТЫ");
+            DrawSectionHeading(new Rect(rect.x + 10f, rect.y + 8f, rect.width - 20f, 26f), "WORKWEAR & TOOLS");
             List<ThingDef> items = GetWorkwearItemsForProfession();
             float top = rect.y + 40f;
             const float gap = 7f;
@@ -521,7 +521,7 @@ namespace BlocksMenu
             Rect viewRect = new Rect(0f, 0f, listRect.width - 16f, viewHeight);
             Widgets.BeginScrollView(listRect, ref workwearScrollPosition, viewRect);
             if (items.Count == 0)
-                Widgets.Label(new Rect(8f, 8f, viewRect.width - 16f, 44f), "Для этой профессии пока не найдены предметы с подходящими бонусами.");
+                Widgets.Label(new Rect(8f, 8f, viewRect.width - 16f, 44f), "No items with relevant bonuses found for this profession yet.");
             else
             {
                 int firstRow = Mathf.Max(0, Mathf.FloorToInt(workwearScrollPosition.y / (cardHeight + gap)));
@@ -562,7 +562,7 @@ namespace BlocksMenu
         {
             if (selectedWorkwearItem == null)
             {
-                Widgets.Label(new Rect(rect.x + 12f, rect.y + 12f, rect.width - 24f, 60f), "Выбери предмет в каталоге.");
+                Widgets.Label(new Rect(rect.x + 12f, rect.y + 12f, rect.width - 24f, 60f), "Select an item from the catalog.");
                 return;
             }
             ThingDef item = selectedWorkwearItem;
@@ -570,11 +570,11 @@ namespace BlocksMenu
             float icon = Mathf.Min(92f, rect.width * 0.30f);
             Widgets.ThingIcon(new Rect(rect.x + 12f, y, icon, icon), item);
             Widgets.Label(new Rect(rect.x + icon + 22f, y + 4f, rect.width - icon - 36f, 52f), item.LabelCap.ToString());
-            Widgets.Label(new Rect(rect.x + icon + 22f, y + 56f, rect.width - icon - 36f, 24f), item.apparel != null ? "Спецодежда" : "Инструмент / экипировка");
+            Widgets.Label(new Rect(rect.x + icon + 22f, y + 56f, rect.width - icon - 36f, 24f), item.apparel != null ? "Workwear" : "Tool / Equipment");
             y += icon + 12f;
             Widgets.DrawLineHorizontal(rect.x + 10f, y, rect.width - 20f);
             y += 10f;
-            DrawSectionHeading(new Rect(rect.x + 12f, y, rect.width - 24f, 24f), "ЭФФЕКТЫ ПРИ НОШЕНИИ / ИСПОЛЬЗОВАНИИ");
+            DrawSectionHeading(new Rect(rect.x + 12f, y, rect.width - 24f, 24f), "EQUIPMENT / USAGE EFFECTS");
             y += 28f;
             List<StatModifier> offsets = item.equippedStatOffsets;
             bool any = false;
@@ -594,7 +594,7 @@ namespace BlocksMenu
             if (workFactors.Count > 0)
             {
                 if (any) y += 6f;
-                DrawSectionHeading(new Rect(rect.x + 12f, y, rect.width - 24f, 22f), "ЭФФЕКТИВНОСТЬ РАБОТ (МОДЫ)");
+                DrawSectionHeading(new Rect(rect.x + 12f, y, rect.width - 24f, 22f), "WORK EFFICIENCY (MODS)");
                 y += 24f;
                 for (int i = 0; i < workFactors.Count && y + 22f < rect.yMax - 90f; i++)
                 {
@@ -606,19 +606,19 @@ namespace BlocksMenu
                 any = true;
             }
             if (!any)
-                Widgets.Label(new Rect(rect.x + 14f, y, rect.width - 28f, 42f), "Специальные бонусы не заданы.");
+                Widgets.Label(new Rect(rect.x + 14f, y, rect.width - 28f, 42f), "No special bonuses configured.");
             y += 8f;
             Widgets.DrawLineHorizontal(rect.x + 10f, y, rect.width - 20f);
             y += 10f;
-            DrawSectionHeading(new Rect(rect.x + 12f, y, rect.width - 24f, 24f), "ЭФФЕКТЫ ПРИ НОШЕНИИ");
+            DrawSectionHeading(new Rect(rect.x + 12f, y, rect.width - 24f, 24f), "EQUIPMENT EFFECTS");
             y += 26f;
             if (item.BaseMass > 0f)
-                Widgets.Label(new Rect(rect.x + 14f, y, rect.width - 28f, 22f), "Вес: " + item.BaseMass.ToString("0.##") + " кг");
+                Widgets.Label(new Rect(rect.x + 14f, y, rect.width - 28f, 22f), "Weight: " + item.BaseMass.ToString("0.##") + " kg");
             y += 24f;
             if (item.apparel != null)
-                Widgets.Label(new Rect(rect.x + 14f, y, rect.width - 28f, 22f), "Слой экипировки: одежда");
+                Widgets.Label(new Rect(rect.x + 14f, y, rect.width - 28f, 22f), "Apparel layer: clothing");
             float buttonY = rect.yMax - 58f;
-            if (Widgets.ButtonText(new Rect(rect.x + 12f, buttonY, rect.width - 24f, 42f), "⚒  ПРОИЗВЕСТИ"))
+            if (Widgets.ButtonText(new Rect(rect.x + 12f, buttonY, rect.width - 24f, 42f), "⚒  CRAFT"))
                 OpenProductionForWorkwear(item);
         }
 
@@ -627,7 +627,7 @@ namespace BlocksMenu
             List<RecipeDef> recipes = FindRecipesForProduct(item);
             if (recipes.Count == 0)
             {
-                Messages.Message("Для предмета «" + item.LabelCap + "» не найден рецепт производства.", MessageTypeDefOf.RejectInput, false);
+                Messages.Message("No production recipe found for “" + item.LabelCap + "”.", MessageTypeDefOf.RejectInput, false);
                 return;
             }
             if (recipes.Count == 1)
@@ -669,7 +669,7 @@ namespace BlocksMenu
         private List<ThingDef> GetWorkwearItemsForProfession()
         {
             List<ThingDef> all = GetWorkwearItems();
-            if (selectedProfession == "Все профессии") return all;
+            if (selectedProfession == "All Professions") return all;
             List<ThingDef> result = new List<ThingDef>();
             for (int i = 0; i < all.Count; i++)
                 if (BelongsToProfession(all[i], selectedProfession)) result.Add(all[i]);
@@ -828,11 +828,11 @@ namespace BlocksMenu
 
         private static string GetWorkFactorLabel(string key)
         {
-            if (key == "TreeFellingSpeed") return "Скорость рубки деревьев";
-            if (key == "PlantHarvestingSpeed") return "Скорость сбора растений";
-            if (key == "PruningSpeed") return "Скорость обрезки растений";
-            if (key == "MiningSpeed") return "Скорость добычи";
-            if (key == "ConstructionSpeed") return "Скорость строительства";
+            if (key == "TreeFellingSpeed") return "Tree Felling Speed";
+            if (key == "PlantHarvestingSpeed") return "Plant Harvesting Speed";
+            if (key == "PruningSpeed") return "Plant Pruning Speed";
+            if (key == "MiningSpeed") return "Mining Speed";
+            if (key == "ConstructionSpeed") return "Construction Speed";
             StatDef stat = DefDatabase<StatDef>.GetNamedSilentFail(key);
             return stat != null ? stat.LabelCap.ToString() : key;
         }
@@ -865,31 +865,31 @@ namespace BlocksMenu
                 StatModifier mod = def.equippedStatOffsets[i];
                 if (mod == null || mod.stat == null) continue;
                 string stat = mod.stat.defName;
-                if (profession == "Горное дело" && (stat == "MiningSpeed" || stat == "MiningYield")) return true;
-                if (profession == "Строительство и ремонт" && (stat == "ConstructionSpeed" || stat == "FixBrokenDownBuildingSuccessChance" || stat == "SmoothingSpeed")) return true;
-                if (profession == "Производство и ремесло" && (stat == "SmithingSpeed" || stat == "SmeltingSpeed" || stat == "TailoringSpeed" || stat == "AssemblySpeedFactor" || stat == "WorkTableEfficiencyFactor" || stat == "WorkTableWorkSpeedFactor" || stat == "HSK_CraftQualityFactor" || stat == "GeneralLaborSpeed")) return true;
-                if (profession == "Сельское хозяйство" && (stat == "PlantWorkSpeed" || stat == "PruningSpeed")) return true;
-                if (profession == "Кулинария и разделка" && (stat == "ButcheryFleshSpeed" || stat == "DrugCookingSpeed" || stat == "FoodPoisonChance")) return true;
-                if (profession == "Медицина и хирургия" && (stat == "MedicalOperationSpeed" || stat == "MedicalSurgerySuccessChance" || stat == "MedicalTendQuality" || stat == "SurgerySuccessChanceFactor")) return true;
-                if (profession == "Исследования и наука" && stat == "ResearchSpeed") return true;
+                if (profession == "Mining" && (stat == "MiningSpeed" || stat == "MiningYield")) return true;
+                if (profession == "Construction & Repair" && (stat == "ConstructionSpeed" || stat == "FixBrokenDownBuildingSuccessChance" || stat == "SmoothingSpeed")) return true;
+                if (profession == "Manufacturing & Crafting" && (stat == "SmithingSpeed" || stat == "SmeltingSpeed" || stat == "TailoringSpeed" || stat == "AssemblySpeedFactor" || stat == "WorkTableEfficiencyFactor" || stat == "WorkTableWorkSpeedFactor" || stat == "HSK_CraftQualityFactor" || stat == "GeneralLaborSpeed")) return true;
+                if (profession == "Agriculture" && (stat == "PlantWorkSpeed" || stat == "PruningSpeed")) return true;
+                if (profession == "Cooking & Butchery" && (stat == "ButcheryFleshSpeed" || stat == "DrugCookingSpeed" || stat == "FoodPoisonChance")) return true;
+                if (profession == "Medicine & Surgery" && (stat == "MedicalOperationSpeed" || stat == "MedicalSurgerySuccessChance" || stat == "MedicalTendQuality" || stat == "SurgerySuccessChanceFactor")) return true;
+                if (profession == "Research & Science" && stat == "ResearchSpeed") return true;
             }
             List<WorkStatFactorEntry> workFactors = GetBaseWorkStatFactors(def);
             for (int i = 0; i < workFactors.Count; i++)
             {
                 string stat = workFactors[i].Name;
-                if (profession == "Сельское хозяйство" && (stat == "TreeFellingSpeed" || stat == "PlantHarvestingSpeed" || stat == "PruningSpeed")) return true;
-                if (profession == "Горное дело" && stat == "MiningSpeed") return true;
-                if (profession == "Строительство и ремонт" && stat == "ConstructionSpeed") return true;
-                if (profession == "Исследования и наука" && stat == "ResearchSpeed") return true;
+                if (profession == "Agriculture" && (stat == "TreeFellingSpeed" || stat == "PlantHarvestingSpeed" || stat == "PruningSpeed")) return true;
+                if (profession == "Mining" && stat == "MiningSpeed") return true;
+                if (profession == "Construction & Repair" && stat == "ConstructionSpeed") return true;
+                if (profession == "Research & Science" && stat == "ResearchSpeed") return true;
             }
             string id = def.defName ?? string.Empty;
             if (IsKnownWorkTool(id))
             {
-                if (profession == "Горное дело" && (id.IndexOf("Mining", StringComparison.OrdinalIgnoreCase) >= 0 || id.IndexOf("Pickaxe", StringComparison.OrdinalIgnoreCase) >= 0)) return true;
-                if (profession == "Строительство и ремонт" && (id.IndexOf("Building", StringComparison.OrdinalIgnoreCase) >= 0 || id.IndexOf("Hammer", StringComparison.OrdinalIgnoreCase) >= 0 || id.IndexOf("Trowel", StringComparison.OrdinalIgnoreCase) >= 0)) return true;
-                if (profession == "Сельское хозяйство" && (id.IndexOf("Woodcut", StringComparison.OrdinalIgnoreCase) >= 0 || id.IndexOf("Agriculture", StringComparison.OrdinalIgnoreCase) >= 0 || id.IndexOf("Sickle", StringComparison.OrdinalIgnoreCase) >= 0 || id.IndexOf("Hoe", StringComparison.OrdinalIgnoreCase) >= 0 || id.IndexOf("Shovel", StringComparison.OrdinalIgnoreCase) >= 0)) return true;
-                if (profession == "Медицина и хирургия" && (id.IndexOf("Medbag", StringComparison.OrdinalIgnoreCase) >= 0 || id.IndexOf("Scalpel", StringComparison.OrdinalIgnoreCase) >= 0)) return true;
-                if (profession == "Производство и ремесло" && (id.IndexOf("Grinder", StringComparison.OrdinalIgnoreCase) >= 0 || id.IndexOf("Soldering", StringComparison.OrdinalIgnoreCase) >= 0 || id.IndexOf("ToolBox", StringComparison.OrdinalIgnoreCase) >= 0 || id.IndexOf("Multitool", StringComparison.OrdinalIgnoreCase) >= 0)) return true;
+                if (profession == "Mining" && (id.IndexOf("Mining", StringComparison.OrdinalIgnoreCase) >= 0 || id.IndexOf("Pickaxe", StringComparison.OrdinalIgnoreCase) >= 0)) return true;
+                if (profession == "Construction & Repair" && (id.IndexOf("Building", StringComparison.OrdinalIgnoreCase) >= 0 || id.IndexOf("Hammer", StringComparison.OrdinalIgnoreCase) >= 0 || id.IndexOf("Trowel", StringComparison.OrdinalIgnoreCase) >= 0)) return true;
+                if (profession == "Agriculture" && (id.IndexOf("Woodcut", StringComparison.OrdinalIgnoreCase) >= 0 || id.IndexOf("Agriculture", StringComparison.OrdinalIgnoreCase) >= 0 || id.IndexOf("Sickle", StringComparison.OrdinalIgnoreCase) >= 0 || id.IndexOf("Hoe", StringComparison.OrdinalIgnoreCase) >= 0 || id.IndexOf("Shovel", StringComparison.OrdinalIgnoreCase) >= 0)) return true;
+                if (profession == "Medicine & Surgery" && (id.IndexOf("Medbag", StringComparison.OrdinalIgnoreCase) >= 0 || id.IndexOf("Scalpel", StringComparison.OrdinalIgnoreCase) >= 0)) return true;
+                if (profession == "Manufacturing & Crafting" && (id.IndexOf("Grinder", StringComparison.OrdinalIgnoreCase) >= 0 || id.IndexOf("Soldering", StringComparison.OrdinalIgnoreCase) >= 0 || id.IndexOf("ToolBox", StringComparison.OrdinalIgnoreCase) >= 0 || id.IndexOf("Multitool", StringComparison.OrdinalIgnoreCase) >= 0)) return true;
             }
             return false;
         }
@@ -937,16 +937,16 @@ namespace BlocksMenu
             float rightLimit = container.xMax - 226f;
             Rect allRect = new Rect(x, y, 104f, buttonHeight);
             if (string.IsNullOrEmpty(currentFolder)) Widgets.DrawBoxSolid(allRect, DashboardAccentSoft);
-            if (Widgets.ButtonText(allRect, "Все рецепты")) { currentFolder = string.Empty; showHiddenRecipes = false; cachedRecipesTick = -1; }
+            if (Widgets.ButtonText(allRect, "All Recipes")) { currentFolder = string.Empty; showHiddenRecipes = false; cachedRecipesTick = -1; }
             x = allRect.xMax + gap;
 
             // These two folders are live views of the existing top-level catalog tabs.
             // Their recipes, orders and compatible benches are derived from those tabs;
             // they are not copied into or mixed with user-created folders.
             DrawBuiltInFolderButton(container, ref x, ref y, rightLimit, SpecialWearFolderKey,
-                "Спецодежда", GetBuiltInFolderBenchTooltip(SpecialWearFolderKey));
+                "Workwear", GetBuiltInFolderBenchTooltip(SpecialWearFolderKey));
             DrawBuiltInFolderButton(container, ref x, ref y, rightLimit, ClothingFolderKey,
-                "Одежда", GetBuiltInFolderBenchTooltip(ClothingFolderKey));
+                "Clothing", GetBuiltInFolderBenchTooltip(ClothingFolderKey));
 
             if (component != null && component.CustomFolders != null)
             {
@@ -967,7 +967,7 @@ namespace BlocksMenu
                     TooltipHandler.TipRegion(folderRect, GetFolderBenchTooltip(folder, configuredBenches));
                     if (Widgets.ButtonText(editRect, "✎"))
                         Find.WindowStack.Add(new Dialog_BlocksMenuFolderEditor(component, folder));
-                    TooltipHandler.TipRegion(editRect, "Редактировать папку: название, станки и рецепты");
+                    TooltipHandler.TipRegion(editRect, "Edit folder: name, workbenches, and recipes");
                     if (Event.current.type == EventType.ContextClick && folderRect.Contains(Event.current.mousePosition))
                     {
                         Find.WindowStack.Add(new Dialog_BlocksMenuFolderEditor(component, folder));
@@ -977,13 +977,13 @@ namespace BlocksMenu
                 }
             }
             Rect manageRect = new Rect(container.xMax - 222f, container.y + 5f, 104f, buttonHeight);
-            if (Widgets.ButtonText(manageRect, "⚙ Папки") && component != null)
+            if (Widgets.ButtonText(manageRect, "⚙ Folders") && component != null)
                 Find.WindowStack.Add(new Dialog_BlocksMenuFolderManager(component));
-            TooltipHandler.TipRegion(manageRect, "Открыть список всех папок для редактирования");
+            TooltipHandler.TipRegion(manageRect, "Open the folder manager");
             Rect addRect = new Rect(container.xMax - 112f, container.y + 5f, 106f, buttonHeight);
-            if (Widgets.ButtonText(addRect, "+ Папка") && component != null)
+            if (Widgets.ButtonText(addRect, "+ Folder") && component != null)
                 Find.WindowStack.Add(new Dialog_BlocksMenuFolderEditor(component, null));
-            TooltipHandler.TipRegion(addRect, "Создать и настроить пользовательскую папку");
+            TooltipHandler.TipRegion(addRect, "Create and configure a custom folder");
         }
 
         private void DrawBuiltInFolderButton(Rect container, ref float x, ref float y, float rightLimit,
@@ -998,7 +998,7 @@ namespace BlocksMenu
             if (currentFolder == key) Widgets.DrawBoxSolid(button, DashboardAccentSoft);
             if (Widgets.ButtonText(button, label))
             {
-                activeMainCategory = "Производство";
+                activeMainCategory = "Production";
                 currentFolder = key;
                 showHiddenRecipes = false;
                 cachedRecipesTick = -1;
@@ -1017,8 +1017,8 @@ namespace BlocksMenu
 
         private static string GetFolderDisplayName(string folder)
         {
-            if (folder == SpecialWearFolderKey) return "Спецодежда";
-            if (folder == ClothingFolderKey) return "Одежда";
+            if (folder == SpecialWearFolderKey) return "Workwear";
+            if (folder == ClothingFolderKey) return "Clothing";
             return folder;
         }
 
@@ -1055,7 +1055,7 @@ namespace BlocksMenu
         private string GetBuiltInFolderBenchTooltip(string folder)
         {
             System.Text.StringBuilder text = new System.Text.StringBuilder();
-            text.Append("Станки папки «").Append(GetFolderDisplayName(folder)).Append("»:");
+            text.Append("Folder workbenches: “").Append(GetFolderDisplayName(folder)).Append("»:");
 
             HashSet<string> labels = new HashSet<string>();
             List<ThingDef> defs = DefDatabase<ThingDef>.AllDefsListForReading;
@@ -1077,7 +1077,7 @@ namespace BlocksMenu
 
             if (labels.Count == 0)
             {
-                text.Append("\\nНе найдено станков с рецептами этой папки.");
+                text.Append("\\nNo workbenches with recipes for this folder were found.");
                 return text.ToString();
             }
 
@@ -1091,10 +1091,10 @@ namespace BlocksMenu
         private static string GetFolderBenchTooltip(string folder, List<string> benchDefs)
         {
             System.Text.StringBuilder text = new System.Text.StringBuilder();
-            text.Append("Станки папки «").Append(folder).Append("»:");
+            text.Append("Folder workbenches: “").Append(folder).Append("»:");
             if (benchDefs == null || benchDefs.Count == 0)
             {
-                text.Append("\nНе выбраны. В папке могут быть только отдельно добавленные рецепты.");
+                text.Append("\nNone selected. The folder may contain individually added recipes only.");
                 return text.ToString();
             }
             for (int i = 0; i < benchDefs.Count; i++)
@@ -1107,17 +1107,17 @@ namespace BlocksMenu
 
         private void DrawSelectedRecipe(Rect rect)
         {
-            DrawSectionHeading(new Rect(rect.x + 8f, rect.y + 2f, rect.width - 16f, 24f), "ВЫБРАННЫЙ РЕЦЕПТ");
+            DrawSectionHeading(new Rect(rect.x + 8f, rect.y + 2f, rect.width - 16f, 24f), "SELECTED RECIPE");
             if (selectedRecipe == null)
             {
-                Widgets.Label(new Rect(rect.x + 6f, rect.y + 34f, rect.width - 12f, 60f), "Выбери рецепт в каталоге, чтобы увидеть ингредиенты и настройки заказа.");
+                Widgets.Label(new Rect(rect.x + 6f, rect.y + 34f, rect.width - 12f, 60f), "Select a recipe in the catalog to view its ingredients and order settings.");
                 return;
             }
 
             float y = rect.y + 30f;
             Widgets.Label(new Rect(rect.x + 6f, y, rect.width - 12f, 42f), selectedRecipe.LabelCap.ToString());
             y += 44f;
-            DrawSectionHeading(new Rect(rect.x + 6f, y, rect.width - 12f, 22f), "ИНГРЕДИЕНТЫ");
+            DrawSectionHeading(new Rect(rect.x + 6f, y, rect.width - 12f, 22f), "INGREDIENTS");
             y += 24f;
             if (selectedRecipe.ingredients != null)
             {
@@ -1131,52 +1131,52 @@ namespace BlocksMenu
                 }
             }
             y += 6f;
-            DrawSectionHeading(new Rect(rect.x + 6f, y, rect.width - 12f, 22f), "ПОДХОДЯЩИЕ СТАНКИ");
+            DrawSectionHeading(new Rect(rect.x + 6f, y, rect.width - 12f, 22f), "COMPATIBLE WORKBENCHES");
             y += 24f;
             List<Building> benches = GetCachedSelectedBenches();
             if (benches.Count == 0)
-                Widgets.Label(new Rect(rect.x + 8f, y, rect.width - 16f, 22f), "Нет подходящего станка");
+                Widgets.Label(new Rect(rect.x + 8f, y, rect.width - 16f, 22f), "No compatible workbench");
             else
-                Widgets.Label(new Rect(rect.x + 8f, y, rect.width - 16f, 38f), benches[0].LabelCap.ToString() + (benches.Count > 1 ? " + ещё " + (benches.Count - 1) : string.Empty));
+                Widgets.Label(new Rect(rect.x + 8f, y, rect.width - 16f, 38f), benches[0].LabelCap.ToString() + (benches.Count > 1 ? " + " + (benches.Count - 1) : string.Empty));
 
             float controlsY = rect.yMax - 132f;
             Widgets.DrawBoxSolid(new Rect(rect.x + 5f, controlsY - 4f, rect.width - 10f, 82f), DashboardPanelRaised);
-            DrawSectionHeading(new Rect(rect.x + 8f, controlsY, rect.width - 16f, 22f), "ПАРАМЕТРЫ ЗАКАЗА");
+            DrawSectionHeading(new Rect(rect.x + 8f, controlsY, rect.width - 16f, 22f), "ORDER SETTINGS");
             countText = Widgets.TextField(new Rect(rect.x + 8f, controlsY + 24f, 76f, 26f), countText ?? "1");
-            if (Widgets.ButtonText(new Rect(rect.x + 92f, controlsY + 24f, rect.width - 100f, 26f), "Режим: " + GetOrderModeLabelForRecipe() + " ▼"))
+            if (Widgets.ButtonText(new Rect(rect.x + 92f, controlsY + 24f, rect.width - 100f, 26f), "Mode: " + GetOrderModeLabelForRecipe() + " ▼"))
                 OpenRecipeModeMenu();
             if (selectedOrderMode == ProductionOrderMode.MakeUntilTarget)
             {
-                Widgets.Label(new Rect(rect.x + 8f, controlsY + 54f, 48f, 22f), "Цель:");
+                Widgets.Label(new Rect(rect.x + 8f, controlsY + 54f, 48f, 22f), "Target:");
                 targetText = Widgets.TextField(new Rect(rect.x + 58f, controlsY + 54f, 70f, 24f), targetText ?? "200");
             }
             float buttonY = rect.yMax - 54f;
-            if (Widgets.ButtonText(new Rect(rect.x + 6f, buttonY, rect.width - 12f, 26f), "Детали рецепта"))
+            if (Widgets.ButtonText(new Rect(rect.x + 6f, buttonY, rect.width - 12f, 26f), "Recipe Details"))
                 Find.WindowStack.Add(new Dialog_BlocksMenuRecipeDetails(selectedRecipe));
-            if (Widgets.ButtonText(new Rect(rect.x + 6f, buttonY + 29f, rect.width - 12f, 26f), "Настроить Bills и создать"))
+            if (Widgets.ButtonText(new Rect(rect.x + 6f, buttonY + 29f, rect.width - 12f, 26f), "Configure Bills & Create"))
                 OpenOrderBuilder();
         }
 
         private void OpenRecipeModeMenu()
         {
             List<FloatMenuOption> options = new List<FloatMenuOption>();
-            options.Add(new FloatMenuOption("Делать N шт.", delegate { selectedOrderMode = ProductionOrderMode.MakeCount; }));
-            options.Add(new FloatMenuOption("Повторять до X", delegate { selectedOrderMode = ProductionOrderMode.MakeUntilTarget; }));
-            options.Add(new FloatMenuOption("Делать бесконечно", delegate { selectedOrderMode = ProductionOrderMode.Forever; }));
+            options.Add(new FloatMenuOption("Make N", delegate { selectedOrderMode = ProductionOrderMode.MakeCount; }));
+            options.Add(new FloatMenuOption("Repeat Until X", delegate { selectedOrderMode = ProductionOrderMode.MakeUntilTarget; }));
+            options.Add(new FloatMenuOption("Make Forever", delegate { selectedOrderMode = ProductionOrderMode.Forever; }));
             Find.WindowStack.Add(new FloatMenu(options));
         }
 
         private string GetOrderModeLabelForRecipe()
         {
-            if (selectedOrderMode == ProductionOrderMode.MakeUntilTarget) return "Повторять до X";
-            if (selectedOrderMode == ProductionOrderMode.Forever) return "Бесконечно";
-            return "N штук";
+            if (selectedOrderMode == ProductionOrderMode.MakeUntilTarget) return "Repeat Until X";
+            if (selectedOrderMode == ProductionOrderMode.Forever) return "Forever";
+            return "N items";
         }
 
         private void DrawRecipeList(Rect rect)
         {
             DrawSectionHeading(new Rect(rect.x + 8f, rect.y + 2f, rect.width - 150f, 22f),
-                showHiddenRecipes ? "СКРЫТЫЕ РЕЦЕПТЫ" : "РЕЦЕПТЫ");
+                showHiddenRecipes ? "HIDDEN RECIPES" : "RECIPES");
             Rect eyeRect = new Rect(rect.xMax - 34f, rect.y + 1f, 26f, 24f);
             bool canUseFolderVisibility = !string.IsNullOrEmpty(currentFolder);
             GUI.color = canUseFolderVisibility ? Color.white : Color.gray;
@@ -1187,7 +1187,7 @@ namespace BlocksMenu
                 recipeScrollPosition = Vector2.zero;
             }
             GUI.color = Color.white;
-            TooltipHandler.TipRegion(eyeRect, canUseFolderVisibility ? (showHiddenRecipes ? "Вернуться к видимым рецептам" : "Показать скрытые рецепты этой папки") : "В папке «Все» скрытие не применяется");
+            TooltipHandler.TipRegion(eyeRect, canUseFolderVisibility ? (showHiddenRecipes ? "Show visible recipes" : "Show hidden recipes in this folder") : "Hiding is unavailable in the “All” folder");
 
             Rect listRect = new Rect(rect.x, rect.y + 26f, rect.width, rect.height - 26f);
             List<RecipeDef> recipes = GetRecipesForCurrentTab();
@@ -1235,7 +1235,7 @@ namespace BlocksMenu
                         selectedRecipe = recipe;
                         OpenOrderBuilder();
                     }
-                    TooltipHandler.TipRegion(addRect, "Быстро добавить заказ");
+                    TooltipHandler.TipRegion(addRect, "Quickly add order");
                     if (!string.IsNullOrEmpty(currentFolder))
                     {
                         Rect hide = new Rect(row.xMax - 27f, row.y + 10f, 22f, 27f);
@@ -1245,7 +1245,7 @@ namespace BlocksMenu
                             if (!showHiddenRecipes && selectedRecipe == recipe) selectedRecipe = null;
                             cachedRecipesTick = -1;
                         }
-                        TooltipHandler.TipRegion(hide, showHiddenRecipes ? "Восстановить рецепт в этой папке" : "Скрыть рецепт только в этой папке");
+                        TooltipHandler.TipRegion(hide, showHiddenRecipes ? "Restore recipe in this folder" : "Hide recipe in this folder only");
                     }
                     TooltipHandler.TipRegion(row, GetCachedIngredientTooltip(recipe));
                     Widgets.DrawLineHorizontal(row.x + 2f, row.yMax, row.width - 4f);
@@ -1293,7 +1293,7 @@ namespace BlocksMenu
             {
                 float x = rect.x + drawn * slotWidth;
                 Widgets.Label(new Rect(x, rect.y + 9f, slotWidth, 22f), "+" + remaining);
-                TooltipHandler.TipRegion(new Rect(x, rect.y, slotWidth, rect.height), "Дополнительные группы ингредиентов: " + remaining);
+                TooltipHandler.TipRegion(new Rect(x, rect.y, slotWidth, rect.height), "Additional ingredient groups: " + remaining);
             }
         }
 
@@ -1317,13 +1317,13 @@ namespace BlocksMenu
             }
 
             DrawSectionHeading(new Rect(rect.x + 8f, rect.y + 2f, rect.width - 16f, 22f),
-                (string.IsNullOrEmpty(currentFolder) ? "АКТИВНЫЕ ЗАКАЗЫ" : "ЗАКАЗЫ: " + GetFolderDisplayName(currentFolder)) + " · " + activeOrders.Count);
+                (string.IsNullOrEmpty(currentFolder) ? "ACTIVE ORDERS" : "ORDERS: " + GetFolderDisplayName(currentFolder)) + " · " + activeOrders.Count);
 
             Rect listRect = new Rect(rect.x + 5f, rect.y + 27f, rect.width - 10f, rect.height - 32f);
             if (activeOrders.Count == 0)
             {
                 Widgets.Label(new Rect(listRect.x + 10f, listRect.y + 10f, listRect.width - 20f, 40f),
-                    "В этой папке пока нет активных заказов.");
+                    "No active orders in this folder yet.");
                 return;
             }
 
@@ -1340,7 +1340,7 @@ namespace BlocksMenu
                     if (bill == null || bill.DeletedOrDereferenced) continue;
                     Rect billRect;
                     // Reserve a dedicated 68 px action column on the right for
-                    // "К станку". Passing the reduced width to the native card also
+                    // "Go to workbench". Passing the reduced width to the native card also
                     // shortens its title area and shifts its native controls left,
                     // preventing any collision with the added button. This is scoped
                     // to this Blocks Menu list; workstation bill UI is never resized.
@@ -1368,7 +1368,7 @@ namespace BlocksMenu
 
         private static string GetNativeBillDisplayLabel(Bill bill)
         {
-            if (bill == null) return "Заказ";
+            if (bill == null) return "Order";
             try
             {
                 Type type = bill.GetType();
@@ -1391,9 +1391,9 @@ namespace BlocksMenu
             }
             catch (Exception ex)
             {
-                Log.Warning("[Blocks Menu] Не удалось получить штатное название Bill: " + ex.Message);
+                Log.Warning("[Blocks Menu] Failed to get the native Bill label: " + ex.Message);
             }
-            return bill.recipe != null ? bill.recipe.LabelCap.ToString() : "Заказ";
+            return bill.recipe != null ? bill.recipe.LabelCap.ToString() : "Order";
         }
 
         private static void JumpToBench(Building bench)
@@ -1423,7 +1423,7 @@ namespace BlocksMenu
             }
             catch (Exception ex)
             {
-                Log.Warning("[Blocks Menu] Не удалось выделить станок после перехода: " + ex.Message);
+                Log.Warning("[Blocks Menu] Failed to select the workbench after navigation: " + ex.Message);
             }
         }
 
@@ -1582,7 +1582,7 @@ namespace BlocksMenu
         {
             if (recipe == null || recipe.ingredients == null || recipe.ingredients.Count == 0)
             {
-                Widgets.Label(rect, "Без ингредиентов");
+                Widgets.Label(rect, "No ingredients");
                 return;
             }
 
@@ -1610,7 +1610,7 @@ namespace BlocksMenu
                 }
                 Widgets.Label(new Rect(x + iconSize + 1f, rect.y + 1f, slotWidth - iconSize - 1f, 22f),
                     ingredient.GetBaseCount().ToString("0.#") + "/" + available);
-                TooltipHandler.TipRegion(iconRect, GetIngredientDisplayName(ingredient.filter) + "\n" + GetCachedIngredientTooltip(recipe) + "\nСуммарно допустимых ресурсов в запасах: " + available);
+                TooltipHandler.TipRegion(iconRect, GetIngredientDisplayName(ingredient.filter) + "\n" + GetCachedIngredientTooltip(recipe) + "\nTotal allowed resources in stock: " + available);
                 x += slotWidth;
             }
         }
@@ -1619,9 +1619,9 @@ namespace BlocksMenu
         // deepest shared ThingCategoryDef instead of enumerating every accepted material.
         public static string GetIngredientDisplayName(ThingFilter filter)
         {
-            if (filter == null) return "Ресурс не указан";
+            if (filter == null) return "Resource not specified";
             List<ThingDef> allowed = new List<ThingDef>(filter.AllowedThingDefs);
-            if (allowed.Count == 0) return "Ресурс не указан";
+            if (allowed.Count == 0) return "Resource not specified";
             if (allowed.Count == 1) return allowed[0].LabelCap.ToString();
 
             List<ThingCategoryDef> common = GetCategoryAncestors(allowed[0]);
@@ -1634,7 +1634,7 @@ namespace BlocksMenu
                 return common[0].LabelCap.ToString();
 
             // Some modded filters intentionally combine unrelated defs. Keep the label compact.
-            return allowed[0].LabelCap.ToString() + " или " + allowed[1].LabelCap.ToString();
+            return allowed[0].LabelCap.ToString() + " or " + allowed[1].LabelCap.ToString();
         }
 
         private static List<ThingCategoryDef> GetCategoryAncestors(ThingDef def)
@@ -1684,10 +1684,10 @@ namespace BlocksMenu
         private static string BuildIngredientTooltip(RecipeDef recipe)
         {
             System.Text.StringBuilder tip = new System.Text.StringBuilder();
-            tip.Append("Необходимые ресурсы:");
+            tip.Append("Required resources:");
             if (recipe.ingredients == null || recipe.ingredients.Count == 0)
             {
-                tip.Append("\nНе требуются");
+                tip.Append("\nNot required");
                 return tip.ToString();
             }
 
@@ -1696,7 +1696,7 @@ namespace BlocksMenu
                 IngredientCount ingredient = recipe.ingredients[i];
                 if (ingredient == null || ingredient.filter == null) continue;
                 string displayName = GetIngredientDisplayName(ingredient.filter);
-                if (displayName == "Ресурс не указан") continue;
+                if (displayName == "Resource not specified") continue;
                 tip.Append("\n").Append(ingredient.GetBaseCount().ToString("0.##")).Append(" × ").Append(displayName);
             }
             return tip.ToString();
@@ -1727,7 +1727,7 @@ namespace BlocksMenu
 
             if (available.Count == 0)
             {
-                Messages.Message("Для этого заказа пока нет Bill на верстаке. Сначала назначь заказ на подходящий станок.", MessageTypeDefOf.RejectInput, false);
+                Messages.Message("This order does not have a Bill on a workbench yet. Assign it to a compatible workbench first.", MessageTypeDefOf.RejectInput, false);
                 return;
             }
 
@@ -1778,17 +1778,17 @@ namespace BlocksMenu
 
         private static string GetOrderModeLabel(BlocksMenuProductionOrder order)
         {
-            if (order.Mode == ProductionOrderMode.MakeUntilTarget) return "Делать до X";
-            if (order.Mode == ProductionOrderMode.Forever) return "Делать бесконечно";
-            return "Делать N шт.";
+            if (order.Mode == ProductionOrderMode.MakeUntilTarget) return "Make Until X";
+            if (order.Mode == ProductionOrderMode.Forever) return "Make Forever";
+            return "Make N";
         }
 
         private static void OpenOrderModeMenu(BlocksMenuProductionOrder order)
         {
             List<FloatMenuOption> options = new List<FloatMenuOption>();
-            options.Add(new FloatMenuOption("Делать N шт.", delegate { ChangeOrderMode(order, ProductionOrderMode.MakeCount); }));
-            options.Add(new FloatMenuOption("Делать до X", delegate { ChangeOrderMode(order, ProductionOrderMode.MakeUntilTarget); }));
-            options.Add(new FloatMenuOption("Делать бесконечно", delegate { ChangeOrderMode(order, ProductionOrderMode.Forever); }));
+            options.Add(new FloatMenuOption("Make N", delegate { ChangeOrderMode(order, ProductionOrderMode.MakeCount); }));
+            options.Add(new FloatMenuOption("Make Until X", delegate { ChangeOrderMode(order, ProductionOrderMode.MakeUntilTarget); }));
+            options.Add(new FloatMenuOption("Make Forever", delegate { ChangeOrderMode(order, ProductionOrderMode.Forever); }));
             Find.WindowStack.Add(new FloatMenu(options));
         }
 
@@ -1992,8 +1992,8 @@ namespace BlocksMenu
                 Type dialogType = typeof(Bill).Assembly.GetType("RimWorld.Dialog_BillConfig", false);
                 if (dialogType == null)
                 {
-                    Log.Error("[Blocks Menu] Не найден штатный тип RimWorld.Dialog_BillConfig.");
-                    Messages.Message("Не удалось найти штатный редактор Bill в этой сборке RimWorld.", MessageTypeDefOf.RejectInput, false);
+                    Log.Error("[Blocks Menu] Native RimWorld.Dialog_BillConfig type was not found.");
+                    Messages.Message("Could not find the native Bill editor in this RimWorld build.", MessageTypeDefOf.RejectInput, false);
                     return;
                 }
 
@@ -2002,8 +2002,8 @@ namespace BlocksMenu
                 Bill_Production productionBill = bill as Bill_Production;
                 if (productionBill == null || productionBill.billStack == null || productionBill.billStack.billGiver == null)
                 {
-                    Log.Error("[Blocks Menu] Для штатного редактора требуется Bill_Production, привязанный к верстаку.");
-                    Messages.Message("Этот Bill не привязан к верстаку или не является производственным заказом.", MessageTypeDefOf.RejectInput, false);
+                    Log.Error("[Blocks Menu] The native editor requires a Bill_Production linked to a workbench.");
+                    Messages.Message("This Bill is not linked to a workbench or is not a production order.", MessageTypeDefOf.RejectInput, false);
                     return;
                 }
 
@@ -2026,13 +2026,13 @@ namespace BlocksMenu
                     }
                 }
 
-                Log.Error("[Blocks Menu] Не найдена совместимая конструкция Dialog_BillConfig(Bill_Production, IntVec3).");
-                Messages.Message("Штатный редактор Bill найден, но его конструктор отличается от ожидаемого API RimWorld 1.6.", MessageTypeDefOf.RejectInput, false);
+                Log.Error("[Blocks Menu] Compatible Dialog_BillConfig(Bill_Production, IntVec3) constructor not found.");
+                Messages.Message("The native Bill editor was found, but its constructor differs from the expected RimWorld 1.6 API.", MessageTypeDefOf.RejectInput, false);
             }
             catch (Exception ex)
             {
-                Log.Error("[Blocks Menu] Не удалось открыть штатный редактор Bill: " + ex);
-                Messages.Message("Ошибка при открытии штатного редактора Bill. Подробности в Player.log.", MessageTypeDefOf.RejectInput, false);
+                Log.Error("[Blocks Menu] Failed to open the native Bill editor: " + ex);
+                Messages.Message("Error opening the native Bill editor. See Player.log for details.", MessageTypeDefOf.RejectInput, false);
             }
         }
     }
@@ -2050,10 +2050,10 @@ namespace BlocksMenu
         public override Vector2 InitialSize { get { return new Vector2(420f, 150f); } }
         public override void DoWindowContents(Rect rect)
         {
-            Widgets.Label(new Rect(0f, 0f, rect.width, 28f), "Переименовать карточку заказа");
+            Widgets.Label(new Rect(0f, 0f, rect.width, 28f), "Rename order card");
             value = Widgets.TextField(new Rect(0f, 38f, rect.width, 32f), value ?? string.Empty);
-            if (Widgets.ButtonText(new Rect(rect.width - 190f, 82f, 90f, 30f), "Сбросить")) value = string.Empty;
-            if (Widgets.ButtonText(new Rect(rect.width - 92f, 82f, 92f, 30f), "Сохранить"))
+            if (Widgets.ButtonText(new Rect(rect.width - 190f, 82f, 90f, 30f), "Reset")) value = string.Empty;
+            if (Widgets.ButtonText(new Rect(rect.width - 92f, 82f, 92f, 30f), "Save"))
             { if (order != null) order.CustomLabel = (value ?? string.Empty).Trim(); Close(); }
         }
     }
@@ -2113,7 +2113,7 @@ namespace BlocksMenu
         {
             Widgets.DrawBoxSolid(new Rect(rect.x, rect.y, rect.width, 32f), DashboardPanelRaised);
             Widgets.DrawBoxSolid(new Rect(rect.x, rect.y, 4f, 32f), DashboardAccent);
-            DrawSectionHeading(new Rect(rect.x + 10f, rect.y + 2f, rect.width - 20f, 28f), "ПОЛНЫЙ СПИСОК РЕЦЕПТОВ  ·  " + folder);
+            DrawSectionHeading(new Rect(rect.x + 10f, rect.y + 2f, rect.width - 20f, 28f), "FULL RECIPE LIST  ·  " + folder);
 
             search = Widgets.TextField(new Rect(rect.x + 8f, rect.y + 38f, rect.width - 16f, 28f), search ?? string.Empty);
             if (!string.IsNullOrEmpty(status))
@@ -2162,20 +2162,20 @@ namespace BlocksMenu
                 Widgets.Label(new Rect(8f, y + 2f, view.width - 116f, 26f), MainTabWindow_CraftingMenu.GetRecipeProductLabel(recipe));
                 bool alreadyAdded = manuallyAdded.Contains(recipe);
                 if (alreadyAdded)
-                    Widgets.Label(new Rect(view.width - 104f, y + 2f, 96f, 26f), "Добавлен");
+                    Widgets.Label(new Rect(view.width - 104f, y + 2f, 96f, 26f), "Added");
                 else
                 {
                     RecipeDef captured = recipe;
-                    if (Widgets.ButtonText(new Rect(view.width - 104f, y + 2f, 96f, 26f), "Добавить"))
+                    if (Widgets.ButtonText(new Rect(view.width - 104f, y + 2f, 96f, 26f), "Add"))
                     {
                         component.AddManualRecipeToFolder(folder, captured);
-                        status = "Добавлен рецепт: " + captured.LabelCap;
+                        status = "Recipe added: " + captured.LabelCap;
                     }
                 }
             }
             Widgets.EndScrollView();
 
-            if (Widgets.ButtonText(new Rect(rect.xMax - 108f, rect.yMax - 30f, 100f, 26f), "Готово"))
+            if (Widgets.ButtonText(new Rect(rect.xMax - 108f, rect.yMax - 30f, 100f, 26f), "Done"))
                 Close();
         }
     }
@@ -2217,7 +2217,7 @@ namespace BlocksMenu
         {
             Widgets.DrawBoxSolid(new Rect(rect.x, rect.y, rect.width, 38f), DashboardPanelRaised);
             Widgets.DrawBoxSolid(new Rect(rect.x, rect.y, 5f, 38f), DashboardAccent);
-            DrawSectionHeading(new Rect(rect.x + 14f, rect.y + 3f, rect.width - 28f, 30f), "BLOCKS MENU  /  СОЗДАНИЕ ПРОИЗВОДСТВЕННОГО ЗАКАЗА");
+            DrawSectionHeading(new Rect(rect.x + 14f, rect.y + 3f, rect.width - 28f, 30f), "BLOCKS MENU  /  CREATE PRODUCTION ORDER");
 
             float top = rect.y + 48f;
             float gap = 10f;
@@ -2233,17 +2233,17 @@ namespace BlocksMenu
             DrawPanel(settingsPanel, DashboardPanel);
             DrawPanel(benchesPanel, DashboardPanel);
 
-            DrawSectionHeading(new Rect(productPanel.x + 10f, productPanel.y + 8f, leftWidth - 20f, 24f), "ИЗДЕЛИЕ И МАТЕРИАЛЫ");
+            DrawSectionHeading(new Rect(productPanel.x + 10f, productPanel.y + 8f, leftWidth - 20f, 24f), "PRODUCT & MATERIALS");
             if (recipe != null)
             {
                 ThingDef product = GameComponent_BlocksMenuQueue.GetPrimaryProduct(recipe);
                 if (product != null) Widgets.ThingIcon(new Rect(productPanel.x + 12f, productPanel.y + 42f, 76f, 76f), product);
                 Widgets.Label(new Rect(productPanel.x + 96f, productPanel.y + 43f, leftWidth - 108f, 56f), MainTabWindow_CraftingMenu.GetRecipeProductLabel(recipe));
                 Widgets.Label(new Rect(productPanel.x + 96f, productPanel.y + 99f, leftWidth - 108f, 38f),
-                    mode == ProductionOrderMode.MakeUntilTarget ? "Повторять до " + targetCount : mode == ProductionOrderMode.Forever ? "Бесконечное производство" : "Количество: " + count);
+                    mode == ProductionOrderMode.MakeUntilTarget ? "Repeat until " + targetCount : mode == ProductionOrderMode.Forever ? "Infinite production" : "Count: " + count);
             }
             Widgets.DrawBoxSolid(new Rect(productPanel.x + 8f, productPanel.y + 144f, leftWidth - 16f, 1f), DashboardBorder);
-            DrawSectionHeading(new Rect(productPanel.x + 10f, productPanel.y + 154f, leftWidth - 20f, 24f), "ТРЕБУЕМЫЕ МАТЕРИАЛЫ");
+            DrawSectionHeading(new Rect(productPanel.x + 10f, productPanel.y + 154f, leftWidth - 20f, 24f), "REQUIRED MATERIALS");
             float ingredientY = productPanel.y + 184f;
             if (recipe != null && recipe.ingredients != null)
             {
@@ -2259,36 +2259,36 @@ namespace BlocksMenu
                 }
             }
 
-            DrawSectionHeading(new Rect(settingsPanel.x + 10f, settingsPanel.y + 8f, centerWidth - 20f, 24f), "ПАРАМЕТРЫ ПРОИЗВОДСТВА");
-            Widgets.Label(new Rect(settingsPanel.x + 12f, settingsPanel.y + 42f, centerWidth - 24f, 22f), "Режим выполнения");
-            string modeLabel = mode == ProductionOrderMode.MakeUntilTarget ? "Повторять до X" : mode == ProductionOrderMode.Forever ? "Бесконечно" : "Сделать N раз";
+            DrawSectionHeading(new Rect(settingsPanel.x + 10f, settingsPanel.y + 8f, centerWidth - 20f, 24f), "PRODUCTION SETTINGS");
+            Widgets.Label(new Rect(settingsPanel.x + 12f, settingsPanel.y + 42f, centerWidth - 24f, 22f), "Execution Mode");
+            string modeLabel = mode == ProductionOrderMode.MakeUntilTarget ? "Repeat Until X" : mode == ProductionOrderMode.Forever ? "Forever" : "Make N";
             Widgets.DrawBoxSolid(new Rect(settingsPanel.x + 10f, settingsPanel.y + 66f, centerWidth - 20f, 38f), DashboardPanelRaised);
             Widgets.Label(new Rect(settingsPanel.x + 18f, settingsPanel.y + 70f, centerWidth - 36f, 28f), modeLabel);
-            Widgets.Label(new Rect(settingsPanel.x + 12f, settingsPanel.y + 116f, 112f, 26f), mode == ProductionOrderMode.MakeUntilTarget ? "Целевой запас:" : "Количество:");
+            Widgets.Label(new Rect(settingsPanel.x + 12f, settingsPanel.y + 116f, 112f, 26f), mode == ProductionOrderMode.MakeUntilTarget ? "Target stock:" : "Count:");
             Widgets.Label(new Rect(settingsPanel.x + 128f, settingsPanel.y + 116f, centerWidth - 140f, 26f), mode == ProductionOrderMode.MakeUntilTarget ? targetCount.ToString() : mode == ProductionOrderMode.Forever ? "∞" : count.ToString());
             if (mode == ProductionOrderMode.MakeUntilTarget)
             {
-                Widgets.Label(new Rect(settingsPanel.x + 12f, settingsPanel.y + 148f, centerWidth - 24f, 42f), "Штатный Bill получает режим TargetCount. Игра сама определяет, сколько циклов нужно выполнить.");
-                Widgets.Label(new Rect(settingsPanel.x + 12f, settingsPanel.y + 194f, 112f, 24f), "Возобновить при:");
+                Widgets.Label(new Rect(settingsPanel.x + 12f, settingsPanel.y + 148f, centerWidth - 24f, 42f), "The native Bill uses the TargetCount mode. The game determines how many cycles must be completed.");
+                Widgets.Label(new Rect(settingsPanel.x + 12f, settingsPanel.y + 194f, 112f, 24f), "Resume at:");
                 Widgets.Label(new Rect(settingsPanel.x + 128f, settingsPanel.y + 194f, centerWidth - 140f, 24f), resumeAtCount.ToString());
             }
             Widgets.DrawBoxSolid(new Rect(settingsPanel.x + 10f, settingsPanel.y + 232f, centerWidth - 20f, 1f), DashboardBorder);
-            DrawSectionHeading(new Rect(settingsPanel.x + 10f, settingsPanel.y + 242f, centerWidth - 20f, 24f), "КАК БУДЕТ СОЗДАН ЗАКАЗ");
+            DrawSectionHeading(new Rect(settingsPanel.x + 10f, settingsPanel.y + 242f, centerWidth - 20f, 24f), "HOW THE ORDER WILL BE CREATED");
             Widgets.Label(new Rect(settingsPanel.x + 12f, settingsPanel.y + 272f, centerWidth - 24f, 84f),
-                "На каждом выбранном станке будет создан отдельный настоящий Bill. Его фильтры ингредиентов, качество и остальные параметры можно будет независимо настроить штатным редактором RimWorld.");
+                "A separate native Bill will be created at each selected workbench. Its ingredient filters, quality, and other settings can be configured independently in the RimWorld editor.");
 
-            DrawSectionHeading(new Rect(benchesPanel.x + 10f, benchesPanel.y + 8f, rightWidth - 20f, 24f), "ПОДХОДЯЩИЕ ВЕРСТАКИ");
-            Widgets.Label(new Rect(benchesPanel.x + 10f, benchesPanel.y + 34f, rightWidth - 20f, 38f), "Выбери станки, на которых создать отдельные Bills.");
-            if (Widgets.ButtonText(new Rect(benchesPanel.x + 10f, benchesPanel.y + 76f, (rightWidth - 25f) / 2f, 26f), "Выбрать все"))
+            DrawSectionHeading(new Rect(benchesPanel.x + 10f, benchesPanel.y + 8f, rightWidth - 20f, 24f), "COMPATIBLE WORKBENCHES");
+            Widgets.Label(new Rect(benchesPanel.x + 10f, benchesPanel.y + 34f, rightWidth - 20f, 38f), "Select the workbenches where separate Bills should be created.");
+            if (Widgets.ButtonText(new Rect(benchesPanel.x + 10f, benchesPanel.y + 76f, (rightWidth - 25f) / 2f, 26f), "Select All"))
                 for (int i = 0; i < compatibleBenches.Count; i++) selectedBenches.Add(compatibleBenches[i]);
-            if (Widgets.ButtonText(new Rect(benchesPanel.x + 15f + (rightWidth - 25f) / 2f, benchesPanel.y + 76f, (rightWidth - 25f) / 2f, 26f), "Снять выбор")) selectedBenches.Clear();
+            if (Widgets.ButtonText(new Rect(benchesPanel.x + 15f + (rightWidth - 25f) / 2f, benchesPanel.y + 76f, (rightWidth - 25f) / 2f, 26f), "Deselect All")) selectedBenches.Clear();
 
             Rect benchList = new Rect(benchesPanel.x + 8f, benchesPanel.y + 110f, rightWidth - 16f, bodyHeight - 120f);
             float rowHeight = 42f;
             Rect benchView = new Rect(0f, 0f, benchList.width - 16f, Math.Max(benchList.height, compatibleBenches.Count * rowHeight + 8f));
             Widgets.BeginScrollView(benchList, ref scroll, benchView);
             if (compatibleBenches.Count == 0)
-                Widgets.Label(new Rect(8f, 8f, benchView.width - 16f, 44f), "На карте нет построенных станков, совместимых с этим рецептом.");
+                Widgets.Label(new Rect(8f, 8f, benchView.width - 16f, 44f), "There are no built workbenches on this map compatible with this recipe.");
             for (int i = 0; i < compatibleBenches.Count; i++)
             {
                 Building bench = compatibleBenches[i];
@@ -2301,16 +2301,16 @@ namespace BlocksMenu
             Widgets.EndScrollView();
 
             float buttonY = rect.yMax - 40f;
-            if (Widgets.ButtonText(new Rect(rect.xMax - 238f, buttonY, 144f, 30f), "Создать Bills")) CreateOrder();
-            if (Widgets.ButtonText(new Rect(rect.xMax - 88f, buttonY, 80f, 30f), "Отмена")) Close();
-            Widgets.Label(new Rect(rect.x + 8f, buttonY + 3f, rect.width - 350f, 26f), "Выбрано станков: " + selectedBenches.Count + " / " + compatibleBenches.Count);
+            if (Widgets.ButtonText(new Rect(rect.xMax - 238f, buttonY, 144f, 30f), "Create Bills")) CreateOrder();
+            if (Widgets.ButtonText(new Rect(rect.xMax - 88f, buttonY, 80f, 30f), "Cancel")) Close();
+            Widgets.Label(new Rect(rect.x + 8f, buttonY + 3f, rect.width - 350f, 26f), "Workbenches selected: " + selectedBenches.Count + " / " + compatibleBenches.Count);
         }
 
         private void CreateOrder()
         {
             if (recipe == null || selectedBenches.Count == 0)
             {
-                Messages.Message("Выбери хотя бы один подходящий верстак.", MessageTypeDefOf.RejectInput, false);
+                Messages.Message("Select at least one compatible workbench.", MessageTypeDefOf.RejectInput, false);
                 return;
             }
             GameComponent_BlocksMenuQueue component = Current.Game == null ? null : Current.Game.GetComponent<GameComponent_BlocksMenuQueue>();
@@ -2353,19 +2353,19 @@ namespace BlocksMenu
 
         public override void DoWindowContents(Rect inRect)
         {
-            if (recipe == null) { Widgets.Label(inRect, "Рецепт недоступен"); return; }
+            if (recipe == null) { Widgets.Label(inRect, "Recipe unavailable"); return; }
             Widgets.DrawBoxSolid(new Rect(inRect.x, inRect.y, inRect.width, 32f), DashboardPanelRaised);
             Widgets.DrawBoxSolid(new Rect(inRect.x, inRect.y, 4f, 32f), DashboardAccent);
-            DrawSectionHeading(new Rect(inRect.x + 10f, inRect.y + 2f, inRect.width - 20f, 28f), "ДЕТАЛИ РЕЦЕПТА  ·  " + recipe.LabelCap);
+            DrawSectionHeading(new Rect(inRect.x + 10f, inRect.y + 2f, inRect.width - 20f, 28f), "RECIPE DETAILS  ·  " + recipe.LabelCap);
             Rect body = new Rect(inRect.x, inRect.y + 36f, inRect.width, inRect.height - 72f);
             DrawPanel(body, DashboardPanel);
             float contentHeight = 50f + (recipe.ingredients == null ? 0 : recipe.ingredients.Count * 48f) + 100f;
             Rect view = new Rect(0f, 0f, body.width - 18f, Math.Max(body.height, contentHeight));
             Widgets.BeginScrollView(body, ref scroll, view);
             float y = 0f;
-            Widgets.Label(new Rect(8f, y, view.width - 16f, 24f), "Предпросмотр рецепта"); y += 26f;
-            Widgets.Label(new Rect(8f, y, view.width - 16f, 38f), "Полные фильтры и ограничения настраиваются штатным редактором Bill через кнопку Bill в карточке заказа."); y += 42f;
-            Widgets.Label(new Rect(8f, y, view.width - 16f, 24f), "Необходимые ингредиенты"); y += 28f;
+            Widgets.Label(new Rect(8f, y, view.width - 16f, 24f), "Recipe Preview"); y += 26f;
+            Widgets.Label(new Rect(8f, y, view.width - 16f, 38f), "Full filters and restrictions can be configured in the native Bill editor using the Bill button on the order card."); y += 42f;
+            Widgets.Label(new Rect(8f, y, view.width - 16f, 24f), "Required Ingredients"); y += 28f;
             if (recipe.ingredients != null)
             {
                 for (int i = 0; i < recipe.ingredients.Count; i++)
@@ -2378,7 +2378,7 @@ namespace BlocksMenu
                 }
             }
             y += 8f;
-            Widgets.Label(new Rect(8f, y, view.width - 16f, 24f), "Совместимые станки"); y += 28f;
+            Widgets.Label(new Rect(8f, y, view.width - 16f, 24f), "Compatible Workbenches"); y += 28f;
             List<Building> benches = cachedBenches ?? new List<Building>();
             for (int i = 0; i < benches.Count; i++)
             {
@@ -2387,7 +2387,7 @@ namespace BlocksMenu
                 y += 26f;
             }
             Widgets.EndScrollView();
-            if (Widgets.ButtonText(new Rect(inRect.x + inRect.width - 150f, inRect.yMax - 30f, 140f, 26f), "Закрыть")) Close();
+            if (Widgets.ButtonText(new Rect(inRect.x + inRect.width - 150f, inRect.yMax - 30f, 140f, 26f), "Close")) Close();
         }
     }
 
@@ -2404,8 +2404,8 @@ namespace BlocksMenu
         public override Vector2 InitialSize { get { return new Vector2(500f, 520f); } }
         public override void DoWindowContents(Rect rect)
         {
-            DrawSectionHeading(new Rect(8f, 4f, rect.width - 16f, 28f), "УПРАВЛЕНИЕ ПАПКАМИ ПРОИЗВОДСТВА");
-            Widgets.Label(new Rect(8f, 32f, rect.width - 16f, 24f), "Выбери любую папку для изменения станков, рецептов или названия.");
+            DrawSectionHeading(new Rect(8f, 4f, rect.width - 16f, 28f), "PRODUCTION FOLDER MANAGEMENT");
+            Widgets.Label(new Rect(8f, 32f, rect.width - 16f, 24f), "Select a folder to edit its workbenches, recipes, or name.");
             Rect listRect = new Rect(4f, 60f, rect.width - 8f, rect.height - 100f);
             DrawPanel(listRect, DashboardPanel);
             int count = component == null || component.CustomFolders == null ? 0 : component.CustomFolders.Count;
@@ -2413,7 +2413,7 @@ namespace BlocksMenu
             Rect view = new Rect(0f, 0f, listRect.width - 18f, contentHeight);
             Widgets.BeginScrollView(listRect, ref scroll, view);
             float y = 4f;
-            if (count == 0) Widgets.Label(new Rect(8f, y, view.width - 16f, 30f), "Пользовательских папок пока нет.");
+            if (count == 0) Widgets.Label(new Rect(8f, y, view.width - 16f, 30f), "There are no custom folders yet.");
             for (int i = 0; i < count; i++)
             {
                 string folder = component.CustomFolders[i];
@@ -2424,14 +2424,14 @@ namespace BlocksMenu
                 Text.Anchor = TextAnchor.MiddleRight;
                 Widgets.Label(new Rect(row.xMax - 112f, row.y + 2f, 38f, 32f), benches.Count.ToString());
                 Text.Anchor = TextAnchor.UpperLeft;
-                if (Widgets.ButtonText(new Rect(row.xMax - 70f, row.y + 4f, 64f, 28f), "Изменить"))
+                if (Widgets.ButtonText(new Rect(row.xMax - 70f, row.y + 4f, 64f, 28f), "Edit"))
                     Find.WindowStack.Add(new Dialog_BlocksMenuFolderEditor(component, folder));
                 y += 42f;
             }
             Widgets.EndScrollView();
-            if (Widgets.ButtonText(new Rect(rect.width - 222f, rect.height - 32f, 104f, 28f), "+ Папка"))
+            if (Widgets.ButtonText(new Rect(rect.width - 222f, rect.height - 32f, 104f, 28f), "+ Folder"))
                 Find.WindowStack.Add(new Dialog_BlocksMenuFolderEditor(component, null));
-            if (Widgets.ButtonText(new Rect(rect.width - 110f, rect.height - 32f, 102f, 28f), "Закрыть")) Close();
+            if (Widgets.ButtonText(new Rect(rect.width - 110f, rect.height - 32f, 102f, 28f), "Close")) Close();
         }
     }
 
@@ -2465,8 +2465,8 @@ namespace BlocksMenu
         {
             Widgets.DrawBoxSolid(new Rect(rect.x, rect.y, rect.width, 30f), DashboardPanelRaised);
             Widgets.DrawBoxSolid(new Rect(rect.x, rect.y, 4f, 30f), DashboardAccent);
-            DrawSectionHeading(new Rect(rect.x + 10f, rect.y + 2f, rect.width - 20f, 26f), editingFolder == null ? "СОЗДАТЬ ПАПКУ" : "НАСТРОИТЬ ПАПКУ");
-            Widgets.Label(new Rect(rect.x, rect.y + 34f, 100f, 24f), "Название:");
+            DrawSectionHeading(new Rect(rect.x + 10f, rect.y + 2f, rect.width - 20f, 26f), editingFolder == null ? "CREATE FOLDER" : "CONFIGURE FOLDER");
+            Widgets.Label(new Rect(rect.x, rect.y + 34f, 100f, 24f), "Name:");
             folderName = Widgets.TextField(new Rect(rect.x + 104f, rect.y + 34f, rect.width - 108f, 24f), folderName ?? string.Empty);
             Rect body = new Rect(rect.x, rect.y + 66f, rect.width, rect.height - 106f);
             DrawPanel(body, DashboardPanel);
@@ -2507,29 +2507,29 @@ namespace BlocksMenu
             Rect view = new Rect(0f, 0f, body.width - 18f, contentHeight);
             Widgets.BeginScrollView(body, ref scroll, view);
             float y = 0f;
-            Widgets.Label(new Rect(6f, y, view.width - 12f, 26f), "СТАНКИ КОЛОНИИ"); y += 30f;
-            Widgets.Label(new Rect(6f, y, view.width - 12f, 34f), "Выбери станки. В папке появятся все рецепты, доступные хотя бы на одном выбранном станке."); y += 38f;
+            Widgets.Label(new Rect(6f, y, view.width - 12f, 26f), "COLONY WORKBENCHES"); y += 30f;
+            Widgets.Label(new Rect(6f, y, view.width - 12f, 34f), "Select workbenches. The folder will include all recipes available at at least one selected workbench."); y += 38f;
             if (benchDefs.Count == 0)
             {
-                Widgets.Label(new Rect(8f, y, view.width - 16f, 26f), "На текущей карте пока нет построенных производственных станков."); y += 30f;
+                Widgets.Label(new Rect(8f, y, view.width - 16f, 26f), "There are no production workbenches built on the current map yet."); y += 30f;
             }
             for (int i = 0; i < benchDefs.Count; i++)
             {
                 ThingDef def = benchDefs[i];
                 bool chosen = selectedBenches.Contains(def.defName);
                 bool builtNow = builtBenchIds.Contains(def.defName);
-                string benchLabel = def.LabelCap.ToString() + (builtNow ? string.Empty : " (не построен на карте)");
+                string benchLabel = def.LabelCap.ToString() + (builtNow ? string.Empty : " (not built on this map)");
                 Widgets.CheckboxLabeled(new Rect(8f, y, view.width - 16f, 26f), benchLabel, ref chosen);
                 if (chosen) selectedBenches.Add(def.defName); else selectedBenches.Remove(def.defName);
                 y += 28f;
             }
             y += 12f;
-            Widgets.Label(new Rect(6f, y, view.width - 12f, 26f), "ОТДЕЛЬНЫЕ РЕЦЕПТЫ"); y += 30f;
+            Widgets.Label(new Rect(6f, y, view.width - 12f, 26f), "INDIVIDUAL RECIPES"); y += 30f;
             recipeSearch = Widgets.TextField(new Rect(8f, y, view.width - 16f, 26f), recipeSearch ?? string.Empty); y += 32f;
-            if (Widgets.ButtonText(new Rect(8f, y, 150f, 26f), "Добавить рецепт"))
+            if (Widgets.ButtonText(new Rect(8f, y, 150f, 26f), "Add Recipe"))
             {
                 if (activeFolderName.Length == 0)
-                    Messages.Message("Сначала укажи название папки.", MessageTypeDefOf.RejectInput, false);
+                    Messages.Message("Enter a folder name first.", MessageTypeDefOf.RejectInput, false);
                 else
                 {
                     component.CreateFolder(activeFolderName);
@@ -2541,20 +2541,20 @@ namespace BlocksMenu
             {
                 RecipeDef recipe = manual[i];
                 Widgets.Label(new Rect(8f, y, view.width - 120f, 24f), recipe.LabelCap.ToString());
-                if (Widgets.ButtonText(new Rect(view.width - 104f, y, 96f, 24f), "Убрать"))
+                if (Widgets.ButtonText(new Rect(view.width - 104f, y, 96f, 24f), "Remove"))
                     component.ExcludeRecipeFromFolder(activeFolderName, recipe);
                 y += 26f;
             }
             if (map != null && selectedBenches.Count > 0)
             {
                 y += 8f;
-                Widgets.Label(new Rect(6f, y, view.width - 12f, 24f), "РЕЦЕПТЫ ВЫБРАННЫХ СТАНКОВ"); y += 26f;
+                Widgets.Label(new Rect(6f, y, view.width - 12f, 24f), "RECIPES FROM SELECTED WORKBENCHES"); y += 26f;
                 for (int i = 0; i < automaticRecipes.Count; i++)
                 {
                     RecipeDef candidate = automaticRecipes[i];
                     Widgets.Label(new Rect(8f, y, view.width - 120f, 24f), candidate.LabelCap.ToString());
                     RecipeDef captured = candidate;
-                    if (Widgets.ButtonText(new Rect(view.width - 104f, y, 96f, 24f), "Исключить"))
+                    if (Widgets.ButtonText(new Rect(view.width - 104f, y, 96f, 24f), "Exclude"))
                     {
                         component.ExcludeRecipeFromFolder(activeFolderName, captured);
                         cachedAutoRecipes.Remove(captured);
@@ -2563,33 +2563,33 @@ namespace BlocksMenu
                 }
             }
             Widgets.EndScrollView();
-            if (Widgets.ButtonText(new Rect(rect.x + rect.width - 260f, rect.yMax - 30f, 120f, 26f), "Сохранить"))
+            if (Widgets.ButtonText(new Rect(rect.x + rect.width - 260f, rect.yMax - 30f, 120f, 26f), "Save"))
             {
                 string name = (folderName ?? string.Empty).Trim();
                 if (name.Length == 0)
                 {
-                    Messages.Message("Укажи название папки.", MessageTypeDefOf.RejectInput, false);
+                    Messages.Message("Enter a folder name.", MessageTypeDefOf.RejectInput, false);
                 }
                 else if (editingFolder != null && name != editingFolder && component.CustomFolders.Contains(name))
                 {
-                    Messages.Message("Папка с таким названием уже существует.", MessageTypeDefOf.RejectInput, false);
+                    Messages.Message("A folder with this name already exists.", MessageTypeDefOf.RejectInput, false);
                 }
                 else
                 {
                     if (editingFolder == null) component.CreateFolder(name);
                     else if (name != editingFolder) component.RenameFolder(editingFolder, name);
                     component.SetFolderBenchDefs(name, selectedBenches);
-                    Messages.Message("Папка «" + name + "» сохранена.", MessageTypeDefOf.PositiveEvent, false);
+                    Messages.Message("Folder “" + name + "” saved.", MessageTypeDefOf.PositiveEvent, false);
                     Close();
                 }
             }
-            if (editingFolder != null && Widgets.ButtonText(new Rect(rect.x + 8f, rect.yMax - 30f, 120f, 26f), "Удалить папку"))
+            if (editingFolder != null && Widgets.ButtonText(new Rect(rect.x + 8f, rect.yMax - 30f, 120f, 26f), "Delete Folder"))
             {
                 Find.WindowStack.Add(Dialog_MessageBox.CreateConfirmation(
-                    "Удалить папку «" + editingFolder + "»? Рецепты и Bills не будут удалены.",
+                    "Delete folder “" + editingFolder + "”? Recipes and Bills will not be deleted.",
                     delegate { component.DeleteFolder(editingFolder); Close(); }));
             }
-            if (Widgets.ButtonText(new Rect(rect.x + rect.width - 130f, rect.yMax - 30f, 120f, 26f), "Закрыть")) Close();
+            if (Widgets.ButtonText(new Rect(rect.x + rect.width - 130f, rect.yMax - 30f, 120f, 26f), "Close")) Close();
         }
 
         private List<RecipeDef> GetCachedAutomaticRecipes(Map map, string query)
@@ -3064,7 +3064,7 @@ namespace BlocksMenu
                 System.Reflection.PropertyInfo property = type.GetProperty(memberName, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
                 if (property != null && property.PropertyType == typeof(int) && property.CanRead) return (int)property.GetValue(bill, null);
             }
-            catch (Exception ex) { Log.WarningOnce("[Blocks Menu] Не удалось прочитать " + memberName + ": " + ex.Message, 728342); }
+            catch (Exception ex) { Log.WarningOnce("[Blocks Menu] Failed to read " + memberName + ": " + ex.Message, 728342); }
             return fallback;
         }
 
@@ -3079,7 +3079,7 @@ namespace BlocksMenu
                 System.Reflection.PropertyInfo property = type.GetProperty(memberName, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
                 if (property != null && property.PropertyType == typeof(int) && property.CanWrite) property.SetValue(bill, value, null);
             }
-            catch (Exception ex) { Log.WarningOnce("[Blocks Menu] Не удалось записать " + memberName + ": " + ex.Message, 728343); }
+            catch (Exception ex) { Log.WarningOnce("[Blocks Menu] Failed to write " + memberName + ": " + ex.Message, 728343); }
         }
 
         private static void SetNativeBillMode(Bill_Production bill, ProductionOrderMode mode)
@@ -3247,7 +3247,7 @@ namespace BlocksMenu
                     if (managed != null && managed.Bench != null && managed.Bill != null && !managed.Bench.Destroyed && BlocksMenuBenchUtility.GetBillStack(managed.Bench) != null)
                     {
                         try { BlocksMenuBenchUtility.GetBillStack(managed.Bench).Delete(managed.Bill); }
-                        catch (Exception ex) { Log.Warning("[Blocks Menu] Не удалось удалить устаревший Bill заказа: " + ex.Message); }
+                        catch (Exception ex) { Log.Warning("[Blocks Menu] Failed to remove obsolete order Bill: " + ex.Message); }
                     }
                     order.ManagedBills.RemoveAt(i);
                 }
@@ -3395,7 +3395,7 @@ namespace BlocksMenu
                 }
                 catch (Exception ex)
                 {
-                    Log.WarningOnce("[Blocks Menu] Не удалось проверить штатное хранение предмета: " + ex.Message, 728341);
+                    Log.WarningOnce("[Blocks Menu] Failed to check native item storage: " + ex.Message, 728341);
                 }
             }
 
@@ -3434,7 +3434,7 @@ namespace BlocksMenu
                 if (managed != null && managed.Bench != null && managed.Bill != null)
                 {
                     try { BlocksMenuBenchUtility.GetBillStack(managed.Bench).Delete(managed.Bill); }
-                    catch (Exception ex) { Log.Warning("[Blocks Menu] Не удалось удалить собственный Bill: " + ex.Message); }
+                    catch (Exception ex) { Log.Warning("[Blocks Menu] Failed to remove custom Bill: " + ex.Message); }
                 }
             }
             order.ManagedBills.Clear();

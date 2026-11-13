@@ -1,0 +1,13 @@
+Craft Menu - English source patch
+
+Copy the folders in this patch into the root of your mod, replacing the matching files.
+Then rebuild BlocksMenu.csproj in Release configuration (target .NET Framework 4.7.2).
+
+IMPORTANT:
+The patch updates C# source and the main-button Def, but does not include a rebuilt
+1.6/Assemblies/BlocksMenu.dll. The DLL in the original archive will not contain these
+English source changes until you rebuild the project.
+
+The remaining Cyrillic strings in MainTabWindow_CraftingMenu.cs are intentional
+Russian substrings used to recognize Russian-named apparel items from other mods.
+They are not user-facing interface labels.

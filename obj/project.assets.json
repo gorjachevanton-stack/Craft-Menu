@@ -420,11 +420,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\BlocksMenu_stage1\\BlocksMenu.csproj",
+      "projectUniqueName": "C:\\Users\\Professional\\Desktop\\BlocksMenu_stage1\\BlocksMenu.csproj",
       "projectName": "BlocksMenu",
-      "projectPath": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\BlocksMenu_stage1\\BlocksMenu.csproj",
+      "projectPath": "C:\\Users\\Professional\\Desktop\\BlocksMenu_stage1\\BlocksMenu.csproj",
       "packagesPath": "C:\\Users\\Professional\\.nuget\\packages\\",
-      "outputPath": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\RimWorld\\Mods\\BlocksMenu_stage1\\obj\\",
+      "outputPath": "C:\\Users\\Professional\\Desktop\\BlocksMenu_stage1\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Professional\\AppData\\Roaming\\NuGet\\NuGet.Config"
